@@ -29,13 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeMapper employeeMapper;
-
-    /**
-     * 员工登录
-     *
-     * @param employeeLoginDTO
-     * @return
-     */
+    //员工登录
     public Employee login(EmployeeLoginDTO employeeLoginDTO) {
         String username = employeeLoginDTO.getUsername();
         String password = employeeLoginDTO.getPassword();
@@ -86,6 +80,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    //员工分类
     public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
     //PageHelper分页查询插件
         PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
@@ -93,6 +88,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         long total=page.getTotal();
         List records=page.getResult();
         return new PageResult(total,records);
+    }
+
+    @Override
+    //员工状态禁用或启用
+    public void changeStatus(Integer status, Long id) {
+        //为了增强通用性,使用传递实体类!
+/*
+        //1.传统创建employee对象
+        Employee employee = new Employee();
+        employee.setStatus(status);
+        employee.setId(id);
+        */
+        //2.builder创建employee对象
+        Employee employee = Employee.builder().status(status).id(id).build();
+        employeeMapper.update(employee);
     }
 
 }

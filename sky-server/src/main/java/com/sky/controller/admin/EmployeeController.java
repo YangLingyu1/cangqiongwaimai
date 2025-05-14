@@ -93,13 +93,29 @@ public class EmployeeController {
     }
     //地址栏传参:只需要参数名一致
     //路径传参:@PathVariable
-    //请求体传参:@RequestBody
+    //请求体JSON传参:@RequestBody
     //请求头传参:@RequestHeader
     @PostMapping("/status/{status}")
     @ApiOperation("员工状态禁用或启用")
     public Result changeStatus(@PathVariable Integer status,Long id){
         log.info("禁用或启用员工：{}，{}",status,id);
         employeeService.changeStatus(status,id);
+        return Result.success();
+    }
+    //根据id查询员工信息
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询员工信息")
+    public Result<Employee> getById(@PathVariable Long id){
+        log.info("根据id查询员工信息:{}",id);
+        Employee employee = employeeService.getById(id);
+        return Result.success(employee);
+    }
+    //修改员工信息
+    @PutMapping
+    @ApiOperation("修改员工信息")
+    public Result update( @RequestBody EmployeeDTO employeeDTO){
+        log.info("修改员工信息:{}",employeeDTO);
+        employeeService.update(employeeDTO);
         return Result.success();
     }
 }
